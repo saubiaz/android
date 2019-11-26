@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "1091917183094",
+    "firebase_url": "https://elle-beauty-app.firebaseio.com",
+    "project_id": "elle-beauty-app",
+    "storage_bucket": "elle-beauty-app.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1091917183094:android:2e5e72e2af27cecf",
+        "android_client_info": {
+          "package_name": "com.example.salonapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1091917183094-irhp88hgekhm2ntoq1nqao0sfsvmq5e2.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.salonapp",
+            "certificate_hash": "4ea5efc89e4733ca147b3f80ceb31ed4dd925736"
+          }
+        },
+        {
+          "client_id": "1091917183094-b9mdj7ajc6a7gkjoq4vdha0r1ofk6viq.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAFiXXHrMHecxVMbckaletadANl-uHb9U8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1091917183094-b9mdj7ajc6a7gkjoq4vdha0r1ofk6viq.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

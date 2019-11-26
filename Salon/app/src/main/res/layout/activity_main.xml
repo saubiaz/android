@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/black"
+    android:orientation="vertical"
+    tools:context=".MainActivity">
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="302dp"
+        app:srcCompat="@drawable/ella" />
+
+    <Button
+        android:id="@+id/main_login"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="30dp"
+        android:layout_marginTop="50dp"
+        android:background="@drawable/button_oval"
+        android:text="LOGIN"
+        android:textSize="20dp" />
+
+
+    <Button
+        android:id="@+id/register"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="30dp"
+        android:layout_marginTop="50dp"
+        android:text="REGISTER"
+        android:textSize="20dp"
+        android:background="@drawable/button_oval"/>
+
+
+
+    <TextView
+        android:id="@+id/txt_skip"
+        android:layout_width="350dp"
+        android:layout_height="wrap_content"
+        android:paddingLeft="150dp"
+        android:paddingTop="30dp"
+        android:text="Just Skip"
+        android:textColor="@color/white"
+        android:textSize="20dp" />
+   <!-- <com.google.android.material.textfield.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:focusable="true"
+        android:focusableInTouchMode="true">
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Full Name"
+            android:textColorHint="@color/colorPrimaryBackground"
+            android:textSize="40dp"/>
+    </com.google.android.material.textfield.TextInputLayout>-->
+
+
+</LinearLayout>

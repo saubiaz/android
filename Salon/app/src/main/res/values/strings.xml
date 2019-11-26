@@ -1,0 +1,40 @@
+<resources>
+    <string name="app_name">Ella Beauty Salon</string>
+
+    <string name="FACEBOOK_APP_ID">661520070982431</string>
+    <string name="ACCOUNT_KIT_CLIENT_TOKEN">24c4b12a84e3e71138c25113b1444536</string>
+
+
+    <string name="about_us">About Us</string>
+    <string name="offers">Offers/Discounts</string>
+    <string name="book_appointments">Book Appointments</string>
+    <string name="packages">Packages</string>
+    <string name="facial">Facial Packages</string>
+    <string name="haircut">Haircut Services</string>
+    <string name="beauty_services">Beauty Services</string>
+    <string name="contact_us">Contact Us</string>
+    <string name="blog">Blog</string>
+    <string name="title_activity_footer_navigation">FooterNavigation</string>
+    <string name="title_home">Home</string>
+    <string name="title_dashboard">Dashboard</string>
+    <string name="title_notifications">Notifications</string>
+    <string name="minimum_password">minimum_password</string>
+    <string name="auth_failed">auth_failed</string>
+
+    <string name="face_skin">FACE &amp; SKIN</string>
+    <string name="hair">HAIR</string>
+    <string name="makeup">MAKEUP</string>
+    <string name="massages">MASSAGES</string>
+    <string name="coloring_styling">COLORING &amp; STYLING</string>
+    <string name="bridal">BRIDAL</string>
+    <string name="manicure">MANICURE</string>
+    <string name="pedicure">PEDICURE</string>
+    <string name="title_activity_footer">FooterActivity</string>
+    <string name="title_featured">Featured</string>
+    <string name="title_services">Services</string>
+    <string name="title_appointments">Appointments</string>
+    <string name="title_products">Products</string>
+    <string name="title_cart">Cart</string>
+    <string name="rupee">\u20B9</string>
+    <string name="decrement">-</string>
+</resources>

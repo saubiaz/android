@@ -1,0 +1,28 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="48dp"
+    android:layout_height="60dp"
+    android:paddingTop="10dp"
+    android:paddingRight="8dp"
+    android:paddingLeft="6dp"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_alignParentRight="true"
+    tools:context=".CustomActionItemLayout">
+
+   <!-- &lt;!&ndash; Menu Item Image -->
+    <ImageView
+        android:layout_width="48dp"
+        android:layout_height="fill_parent"
+        android:clickable="true"
+        android:src="@drawable/ic_noun_shopping_cart_7304" />
+
+   <!-- &lt;!&ndash; Badge Count &ndash;&gt; -->
+  <TextView
+      android:id="@+id/cart_badge"
+      android:layout_width="20dp"
+      android:layout_height="19dp"
+      android:layout_alignParentRight="true"
+      android:clickable="true"
+      android:textAlignment="center"
+      android:background="@drawable/badge_background"/>
+
+</RelativeLayout>

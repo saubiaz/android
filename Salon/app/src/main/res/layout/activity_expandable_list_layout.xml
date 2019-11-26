@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ExpandableListLayout">
+
+
+
+    <ListView
+        android:id="@+id/listView"
+        android:layout_width="match_parent"
+        android:layout_height="500dp"
+        android:textAlignment="center"
+        android:divider="@drawable/divider"
+        android:dividerHeight="1dp">
+    </ListView>
+
+
+    <FrameLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/listView"
+        android:background="@color/black">
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/featured_products_expandable_list_layout"
+        android:layout_width="match_parent"
+        android:layout_height="80dp"
+        android:textAlignment="center"
+        android:orientation="horizontal"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
+    </FrameLayout>
+
+
+    <include
+       layout="@layout/activity_curved_navigation_footer"></include>
+        <!--  <com.google.android.material.floatingactionbutton.FloatingActionButton
+             android:id="@+id/fab"
+             android:layout_width="wrap_content"
+             android:layout_height="wrap_content"
+             android:layout_alignParentBottom="true"
+             android:layout_centerInParent="true"
+             android:layout_marginBottom="35dp"
+             android:clickable="true"
+             android:onClick="onClickBookAppointments"
+             app:backgroundTint="@color/black"
+             app:rippleColor="@color/pink"
+             android:src="@drawable/services"
+             android:layout_gravity="bottom|center"
+             app:borderWidth="2dp"
+             android:backgroundTint="@color/pink"
+             android:tint="@color/white" />-->
+
+
+
+
+</RelativeLayout>

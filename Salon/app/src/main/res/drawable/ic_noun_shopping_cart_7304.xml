@@ -1,0 +1,37 @@
+<vector  android:height="24dp"
+    android:viewportHeight="125" android:viewportWidth="100"
+    android:width="24dp" xmlns:android="http://schemas.android.com/apk/res/android">
+    <path  android:fillColor="#FFFFFFFF" android:fillType="evenOdd" android:pathData="M71.463,76.121c3.552,0 6.42,2.87 6.42,6.422c0,3.538 -2.868,6.413 -6.42,6.413c-3.538,0 -6.414,-2.875 -6.414,-6.413C65.049,78.991 67.925,76.121 71.463,76.121z"/>
+    <path android:fillColor="#FFFFFFFF" android:fillType="evenOdd" android:pathData="M41.517,76.121c3.538,0 6.414,2.87 6.414,6.422c0,3.538 -2.876,6.413 -6.414,6.413c-3.552,0 -6.421,-2.875 -6.421,-6.413C35.096,78.991 37.965,76.121 41.517,76.121z"/>
+    <path android:fillColor="#FFFFFFFF" android:fillType="evenOdd" android:pathData="M91.768,34.146l-16.065,32.036l-39.475,0l-18.605,-43.785l-16.805,0l0,7.515l12.529,0l18.473,42.738l48.207,0l19.655,-38.504z"/>
+    <path android:fillColor="#FFFFFFFF" android:fillType="evenOdd" android:pathData="M37,57h4v4h-4z"/>
+    <!--<path android:fillColor="#FFFFFFFF" android:fillType="evenOdd" android:pathData="M44,57h4v4h-4z"/>-->
+    <path android:fillColor="#FFFFFFFF" android:fillType="evenOdd" android:pathData="M51,57h4v4h-4z"/>
+    <!--<path android:fillColor="#FFFFFFFF" android:fillType="evenOdd" android:pathData="M58,57h4v4h-4z"/>-->
+    <path android:fillColor="#FFFFFFFF" android:fillType="evenOdd" android:pathData="M65,57h4v4h-4z"/>
+    <!--<path android:fillColor="#FFFFFFFF" android:fillType="evenOdd" android:pathData="M72,57h4v4h-4z"/>-->
+    <!--<path android:fillColor="#FFFFFFFF" android:fillType="evenOdd" android:pathData="M40,50h4v4h-4z"/>-->
+    <path android:fillColor="#FFFFFFFF" android:fillType="evenOdd" android:pathData="M33,50h4v4h-4z"/>
+    <path android:fillColor="#FFFFFFFF" android:fillType="evenOdd" android:pathData="M47,50h4v4h-4z"/>
+    <!--<path android:fillColor="#FFFFFFFF" android:fillType="evenOdd" android:pathData="M54,50h4v4h-4z"/>-->
+    <path android:fillColor="#FFFFFFFF" android:fillType="evenOdd" android:pathData="M61,50h4v4h-4z"/>
+    <!--<path android:fillColor="#FFFFFFFF" android:fillType="evenOdd" android:pathData="M68,50h4v4h-4z"/>-->
+    <path android:fillColor="#FFFFFFFF" android:fillType="evenOdd" android:pathData="M75,50h4v4h-4z"/>
+    <!--<path android:fillColor="#FFFFFFFF" android:fillType="evenOdd" android:pathData="M44,43h4v4h-4z"/>-->
+    <path android:fillColor="#FFFFFFFF" android:fillType="evenOdd" android:pathData="M37,43h4v4h-4z"/>
+    <!--<path android:fillColor="#FFFFFFFF" android:fillType="evenOdd" android:pathData="M30,43h4v4h-4z"/>-->
+    <path android:fillColor="#FFFFFFFF" android:fillType="evenOdd" android:pathData="M51,43h4v4h-4z"/>
+    <!--<path android:fillColor="#FFFFFFFF" android:fillType="evenOdd" android:pathData="M58,43h4v4h-4z"/>-->
+    <path android:fillColor="#FFFFFFFF" android:fillType="evenOdd" android:pathData="M65,43h4v4h-4z"/>
+    <!--<path android:fillColor="#FFFFFFFF" android:fillType="evenOdd" android:pathData="M72,43h4v4h-4z"/>-->
+    <path android:fillColor="#FFFFFFFF" android:fillType="evenOdd" android:pathData="M79,43h4v4h-4z"/>
+    <!--<path android:fillColor="#FFFFFFFF" android:fillType="evenOdd" android:pathData="M41,36h4v4h-4z"/>-->
+    <path android:fillColor="#FFFFFFFF" android:fillType="evenOdd" android:pathData="M34,36h4v4h-4z"/>
+    <!--<path android:fillColor="#FFFFFFFF" android:fillType="evenOdd" android:pathData="M27,36h4v4h-4z"/>-->
+    <path android:fillColor="#FFFFFFFF" android:fillType="evenOdd" android:pathData="M48,36h4v4h-4z"/>
+    <!--<path android:fillColor="#FFFFFFFF" android:fillType="evenOdd" android:pathData="M55,36h4v4h-4z"/>-->
+    <path android:fillColor="#FFFFFFFF" android:fillType="evenOdd" android:pathData="M62,36h4v4h-4z"/>
+    <!--<path android:fillColor="#FFFFFFFF" android:fillType="evenOdd" android:pathData="M69,36h4v4h-4z"/>-->
+    <path android:fillColor="#FFFFFFFF" android:fillType="evenOdd" android:pathData="M76,36h4v4h-4z"/>
+   <!-- <path android:fillColor="#FFFFFFFF" android:fillType="evenOdd" android:pathData="M83,36h4v4h-4z"/>-->
+</vector>
