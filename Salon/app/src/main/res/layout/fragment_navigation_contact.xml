@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".NavigationContact"
+    android:background="@drawable/background_latest">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="10dp"
+            android:layout_height="wrap_content"
+            android:src="@drawable/contact_us_latest"/>
+
+        <RelativeLayout
+            android:id="@+id/relative_call"
+            android:layout_width="250dp"
+            android:layout_height="50dp"
+            android:layout_marginStart="50dp">
+
+            <ImageView
+                android:id="@+id/img_call"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:src="@drawable/call_us_latest" />
+
+            <TextView
+                android:id="@+id/contact_phone"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignLeft="@+id/img_call"
+                android:layout_marginTop="20dp"
+                android:layout_marginStart="75dp"
+                android:singleLine="true"
+                android:text="+91 7829699265"
+                android:textAlignment="center" />
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/relative_email"
+            android:layout_width="250dp"
+            android:layout_height="50dp"
+            android:layout_marginStart="50dp">
+
+            <ImageView
+                android:id="@+id/img_email"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:src="@drawable/email_latest" />
+
+            <TextView
+                android:id="@+id/contact_email"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignLeft="@+id/img_email"
+                android:layout_marginTop="20dp"
+                android:layout_marginStart="75dp"
+                android:singleLine="true"
+                android:text="saubiazarnain@gmail.com"
+                android:textAlignment="center" />
+
+        </RelativeLayout>
+
+
+        <RelativeLayout
+            android:id="@+id/relative_website"
+            android:layout_width="250dp"
+            android:layout_height="50dp"
+            android:layout_marginStart="50dp">
+
+            <ImageView
+                android:id="@+id/img_website"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:src="@drawable/website_latest" />
+
+            <TextView
+                android:id="@+id/contact_website"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignLeft="@+id/img_website"
+                android:layout_marginTop="20dp"
+                android:layout_marginStart="75dp"
+                android:singleLine="true"
+                android:text="www.ellabeautysalon.com"
+                android:textAlignment="center" />
+
+        </RelativeLayout>
+
+
+        <RelativeLayout
+            android:id="@+id/relative_address"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="50dp">
+
+            <ImageView
+                android:id="@+id/img_address"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:src="@drawable/location_latest" />
+
+            <TextView
+                android:id="@+id/contact_address"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignStart="@+id/img_address"
+                android:layout_marginTop="20dp"
+                android:layout_marginStart="75dp"
+                android:text="No.82,1st Floor Mackan Road\n Bharatinagar\n Bangalore\n PinCode - 560001"
+                android:textAlignment="center" />
+
+        </RelativeLayout>
+    </LinearLayout>
+
+</FrameLayout>
