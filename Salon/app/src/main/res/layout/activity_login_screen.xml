@@ -1,54 +1,110 @@
 <?xml version="1.0" encoding="utf-8"?>
+
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/grey"
-    android:orientation="vertical"
-    tools:context=".LoginScreen">
+    android:background="@drawable/cover_latest">
+
+    <ImageView
+        android:id="@+id/img_ella"
+        android:layout_width="250dp"
+        android:layout_height="250dp"
+        android:layout_centerHorizontal="true"
+        android:src="@drawable/ella_latest_circular" />
+
+    <TextView
+        android:id="@+id/beauty_salon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/img_ella"
+        android:layout_marginStart="155dp"
+        android:text="BEAUTY SALON"
+        android:layout_marginTop="-25dp"
+        android:textAlignment="center"
+        android:textColor="@color/pink"
+        android:textSize="20dp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/slogan"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:maxLines="1"
+        android:layout_below="@+id/beauty_salon"
+        android:layout_marginStart="170dp"
+        android:text="We'll Style , You'll Smile!!..."
+        android:textColor="@android:color/holo_orange_light"
+        android:textSize="13dp"
+        android:textStyle="italic" />
 
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
+    <EditText
+        android:id="@+id/username"
+        android:layout_width="367dp"
+        android:layout_height="70dp"
+        android:layout_below="@+id/slogan"
+        android:layout_marginStart="25dp"
+        android:layout_marginTop="50dp"
+        android:layout_marginEnd="25dp"
+        android:background="@drawable/rectangle"
+        android:hint="Username"
+        android:textAlignment="center" />
 
+    <EditText
+        android:id="@+id/password"
+        android:layout_width="367dp"
+        android:layout_height="70dp"
+        android:layout_below="@+id/username"
+        android:layout_marginStart="25dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="25dp"
+        android:background="@drawable/rectangle"
+        android:inputType="textWebPassword"
+        android:hint="Password"
+        android:textAlignment="center" />
 
-        <ImageView
-            android:layout_width="match_parent"
-            android:layout_height="250dp"
-            app:srcCompat="@drawable/cosmetics" />
+    <Button
+        android:id="@+id/sign_in"
+        android:layout_width="367dp"
+        android:layout_height="70dp"
+        android:layout_below="@+id/password"
+        android:layout_marginStart="25dp"
+        android:layout_marginTop="50dp"
+        android:layout_marginEnd="25dp"
+        android:background="@color/pink"
+        android:text="Sign in"
+        android:textAllCaps="false"
+        android:textColor="@color/white"
+        android:textSize="20sp" />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="36dp"
-            android:layout_gravity="center"
-            android:layout_marginBottom="30dp"
-            android:layout_marginTop="100dp"
-            android:textSize="20dp"
-            android:text="Enter the OTP Code sent to your Mobile" />
+    <Button
+        android:id="@+id/create_account"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/sign_in"
+        android:layout_marginStart="20dp"
+        android:background="@android:color/transparent"
+        android:clickable="true"
+        android:paddingBottom="10dp"
+        android:text="@string/create_account_sign_in"
+        android:textAllCaps="false"
+        android:textColor="@color/white"
+        android:textSize="14sp" />
 
-        <EditText
-            android:id="@+id/login_otp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:inputType="number"
-            android:background="@drawable/button_oval"
-            android:layout_marginBottom="30dp"
-            android:textAlignment="center"
-            android:layout_marginTop="10dp" />
+    <Button
+        android:id="@+id/forgot_password"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/sign_in"
+        android:layout_alignParentEnd="true"
+        android:layout_marginEnd="20dp"
+        android:background="@android:color/transparent"
+        android:gravity="end"
+        android:paddingTop="10dp"
+        android:text="@string/forgot_password"
+        android:textAllCaps="false"
+        android:textColor="@color/white"
+        android:textSize="14sp" />
 
-        <Button
-            android:id="@+id/login"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="@drawable/button_oval"
-            android:layout_gravity="center"
-            android:layout_marginBottom="20dp"
-            android:text="Login" />
-
-
-
-</LinearLayout>
 </RelativeLayout>

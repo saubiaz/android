@@ -9,10 +9,17 @@
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
-        android:label="@string/app_name"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme">
-        <activity android:name=".BookApointmentList"></activity>
+        android:theme="@style/Theme.AppCompat.NoActionBar">
+        <activity android:name=".AppStartActivity"></activity>
+        <activity android:name=".ResetPasswordActivity" />
+        <activity android:name=".MyOrdersActivity" />
+        <activity
+            android:name=".NavigationDrawerAcitivity"
+            android:theme="@style/AppTheme" />
+        <activity android:name=".Product_Grid_Layout" />
+        <activity android:name=".ProductsLayoutScreen" />
+        <activity android:name=".BookApointmentList" />
         <activity android:name=".MoreOptionsActivity" />
         <activity android:name=".ListConfirmOrder" />
         <activity android:name=".ConfirmOrderActivity" />
@@ -26,8 +33,7 @@
         <activity android:name=".CurvedNavigationFooter" />
         <activity android:name=".MainActivity" />
         <activity android:name=".LoginScreen" />
-        <activity android:name=".SignUpScreen" />
-        <activity android:name=".ImageSlidingScreen" />
+        <activity android:name=".SignUpScreen" /> <!-- <activity android:name=".ImageSlidingScreen" /> -->
         <activity android:name=".GridsLayoutScreen" />
         <activity android:name=".ProductsServicesScreen">
             <intent-filter>

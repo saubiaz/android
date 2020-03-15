@@ -30,17 +30,5 @@
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:textSize="15sp" />
 
-    <Button
-        android:id="@+id/decrement"
-        android:layout_width="52dp"
-        android:layout_height="44dp"
-        android:layout_alignParentEnd="true"
-        android:background="@drawable/increment"
-        android:clickable="true"
-        android:focusable="true"
-        android:text="@string/decrement"
-        android:textSize="20sp"
-        app:layout_anchorGravity="bottom|right|end" />
-
 
 </RelativeLayout>

@@ -37,4 +37,41 @@
     <string name="title_cart">Cart</string>
     <string name="rupee">\u20B9</string>
     <string name="decrement">-</string>
+    <string name="create_account">Create Account</string>
+    <string name="create_account_sign_in"><u>Create Account</u></string>
+    <string name="forgot_password"><u>Forgot Password?</u></string>
+    <string name="view_all"><u>View All</u></string>
+    <string name="title_activity_navigation_drawer_acitivity">NavigationDrawerAcitivity</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="nav_header_title">Android Studio</string>
+    <string name="nav_header_subtitle">android.studio@android.com</string>
+    <string name="nav_header_desc">Navigation header</string>
+    <string name="action_settings">Settings</string>
+
+    <string name="menu_home">Home</string>
+    <string name="menu_gallery">Gallery</string>
+    <string name="menu_slideshow">Slideshow</string>
+    <string name="menu_tools">Tools</string>
+    <string name="menu_share">Share</string>
+    <string name="menu_send">Send</string>
+    <string name="title_activity_expandable_tab">ExpandableTabActivity</string>
+    <string name="tab_text_1">Tab 1</string>
+    <string name="tab_text_2">Tab 2</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="reset_password">RESET PASSWORD</string>
+    <string name="menu_refer">Refer A Friend</string>
+    <string name="menu_contact">Contact Us</string>
+    <string name="menu_rate_us">Rate Us</string>
+    <string name="refer_A_friend">Select three friends or family whom you want to refer and tap on Continue.
+        If your selection is valid you will be allowed to proceed.
+        \n\n
+        Selection is valid if the guest is not an existing customer, and if the guest has not already been referred by someone else.
+        \n\n
+        If the referred guest downloads the app and completes a booking and visit, you will get 250 points, and your referred guest will
+        get 50 points , in your respective Ella Accounts.
+    </string>
+    <string name="get_link">Get Link</string>
 </resources>

@@ -19,6 +19,7 @@ import android.widget.TextView;
 
 import com.example.salonapp.dtos.BeautyService;
 import com.example.salonapp.dtos.Cart;
+import com.example.salonapp.dtos.ProductDetails;
 import com.example.salonapp.dtos.SelectedItems;
 import com.example.salonapp.interfaces.AdapterCallBackForCartCount;
 import com.google.android.gms.common.util.CollectionUtils;
@@ -34,6 +35,7 @@ public class ListLayoutAdapter extends BaseAdapter {
 
     private Context context;
     private ArrayList<BeautyService> beautyServiceArrayList;
+    private ArrayList<ProductDetails> productDetailsArrayList;
     private LayoutInflater inflater;
     public List<Cart> cartList;
 
@@ -46,9 +48,14 @@ public class ListLayoutAdapter extends BaseAdapter {
     private AlphaAnimation buttonClick = new AlphaAnimation(1F, 0.8F);
 
 
-    public ListLayoutAdapter(Context context, ArrayList<BeautyService> beautyServiceArrayList, AdapterCallBackForCartCount adapterCallback, int count, SelectedItems selectedItems) {
+    public ListLayoutAdapter(Context context, ArrayList<BeautyService> beautyServiceArrayList, ArrayList<ProductDetails> productDetailsList,AdapterCallBackForCartCount adapterCallback, int count, SelectedItems selectedItems) {
         this.context = context;
-        this.beautyServiceArrayList = beautyServiceArrayList;
+        if(!CollectionUtils.isEmpty(beautyServiceArrayList)) {
+            this.beautyServiceArrayList = beautyServiceArrayList;
+        }
+        if(!CollectionUtils.isEmpty(productDetailsList)){
+            this.productDetailsArrayList = productDetailsList;
+        }
         this.adapterCallback = adapterCallback;
         inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         mCartItemCount = count;

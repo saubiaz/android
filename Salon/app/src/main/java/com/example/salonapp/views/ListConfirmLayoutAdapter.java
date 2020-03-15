@@ -7,7 +7,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -165,7 +164,7 @@ public class ListConfirmLayoutAdapter extends BaseAdapter {
                 DialogInterface.OnClickListener dialogClickListener = (dialog, which) -> {
                     switch (which) {
                         case DialogInterface.BUTTON_POSITIVE:
-                            getSelectedList(v,counter,decrementButton);
+                            getSelectedList(v, counter, decrementButton);
                             break;
 
                         case DialogInterface.BUTTON_NEGATIVE:

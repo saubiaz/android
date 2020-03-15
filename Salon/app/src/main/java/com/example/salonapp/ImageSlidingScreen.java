@@ -32,7 +32,7 @@ public class ImageSlidingScreen extends AppCompatActivity   implements BottomNav
 
 
 
-        sliderDotspanel = (LinearLayout) findViewById(R.id.SliderDots);
+        sliderDotspanel = (LinearLayout) findViewById(R.id.slider_dots);
 
         ViewPagerAdapter viewPagerAdapter = new ViewPagerAdapter(this);
 
@@ -79,7 +79,7 @@ public class ImageSlidingScreen extends AppCompatActivity   implements BottomNav
             }
         });
 
-        navigationView = (BottomNavigationView) findViewById(R.id.nav_view);
+        navigationView = (BottomNavigationView) findViewById(R.id.drawer_nav_view);
         navigationView.setOnNavigationItemSelectedListener(this);
 
     }

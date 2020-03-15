@@ -24,14 +24,16 @@
         android:backgroundTint="@color/pink"
         android:tint="@color/white" />
 
-    <com.example.salonapp.views.CurvedBottomNavigationView
-        android:id="@+id/customBottomBar"
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/bottom_nav_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:enabled="true"
+        app:itemBackground="@color/pink"
         app:itemTextColor="@color/white"
         app:itemIconTint="@color/bottom_nav_color_state"
+        app:menu="@menu/bottom_nav_menu"
         app:labelVisibilityMode="labeled" />
 
 

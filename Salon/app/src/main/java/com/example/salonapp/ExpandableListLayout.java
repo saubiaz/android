@@ -1,176 +1,176 @@
 package com.example.salonapp;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.FragmentTransaction;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Parcelable;
-import android.util.Log;
-import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
 import android.widget.Button;
-import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBarDrawerToggle;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.core.view.GravityCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
+
 import com.example.salonapp.dtos.BeautyService;
 import com.example.salonapp.dtos.Cart;
-import com.example.salonapp.dtos.LayoutOptions;
 import com.example.salonapp.dtos.SelectedItems;
 import com.example.salonapp.interfaces.AdapterCallBackForCartCount;
-import com.example.salonapp.views.CurvedBottomNavigationView;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
+import com.google.android.gms.common.util.CollectionUtils;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.QuerySnapshot;
+import com.google.android.material.navigation.NavigationView;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-import java.util.Objects;
-import java.util.stream.Collectors;
 
-public class ExpandableListLayout extends AppCompatActivity implements BottomNavigationView.OnNavigationItemSelectedListener, AdapterCallBackForCartCount{
+public class ExpandableListLayout extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, AdapterCallBackForCartCount, ExpandableServicesFragment.OnListFragmentInteractionListener
+         {
 
-    protected CurvedBottomNavigationView curvedBottomNavigationView;
+    protected BottomNavigationView bottomNavigationView;
 
     Menu customMenu;
     Button decrementButton, incrementButton;
 
     TextView textCartItemCount;
-    public int mCartItemCount ;
+    public int mCartItemCount;
     RelativeLayout actionView;
-    ListLayoutAdapter adapter ;
-    Context mcontext;
-    SelectedItems selectedItems = new SelectedItems();
+    public ListLayoutAdapter adapter;
+    private SelectedItems selectedItems = new SelectedItems();
+    private List<Cart> productCartList = new ArrayList<>();
+    private String service;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_expandable_list_layout);
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        TextView mTitle = toolbar.findViewById(R.id.toolbar_title);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
 
-
+        mTitle.setText(getIntent().getStringExtra("layoutName"));
         //THE EXPANDABLE
-        ListView elv = (ListView) findViewById(R.id.listView);
+        //ListView elv = findViewById(R.id.listView);
 
-        incrementButton = (Button) findViewById(R.id.increment);
-        decrementButton = (Button) findViewById(R.id.decrement);
+        incrementButton = findViewById(R.id.increment);
+        decrementButton = findViewById(R.id.decrement);
         final ArrayList<BeautyService> beautyServices = new ArrayList<>();
         String layout = getIntent().getStringExtra("layoutName");
         this.setTitle(layout);
         mCartItemCount = getIntent().getExtras().getInt("count");
 
-        if(null!=getIntent() && null!=getIntent().getExtras()) {
-            selectedItems.setCartList((ArrayList<Cart>) getIntent().getExtras().get("selectedItems"));
+        if (null != getIntent() && null != getIntent().getExtras()) {
+            if (null != getIntent().getExtras().get("selectedItems")) {
+                selectedItems = (SelectedItems) getIntent().getExtras().get("selectedItems");
+            }
+            if (null != getIntent().getExtras().get("productCartList")) {
+                productCartList.addAll((ArrayList<Cart>) getIntent().getExtras().get("productCartList"));
+            }
+            if(null != getIntent().getExtras().get("service")){
+                service = getIntent().getExtras().getString("service");
+            }
         }
 
 
-        adapter = new ListLayoutAdapter(getApplicationContext(), beautyServices,this,mCartItemCount,selectedItems);
+        Fragment mFragment = new ExpandableServicesFragment();
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        Bundle bundle = new Bundle();
+        bundle.putSerializable("cartList", (Serializable) (CollectionUtils.isEmpty(selectedItems.getCartList()) ? new ArrayList<>() : selectedItems.getCartList()));
+        bundle.putInt("cartCount", mCartItemCount);
+        bundle.putString("service",service);
+        mFragment.setArguments(bundle);
+        fragmentManager.beginTransaction()
+                .replace(R.id.expandable_frame, mFragment).commit();
 
-        Objects.requireNonNull(getSupportActionBar()).setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
-        getSupportActionBar().setCustomView(R.layout.activity_custom_action_bar);
-        ActionBar.LayoutParams p = new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
-        p.gravity = Gravity.CENTER;
-        TextView layoutName = (TextView) findViewById(R.id.title);
-        layoutName.setText(layout);
 
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
-        db.collection("Pedicure").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                if (task.isSuccessful()) {
-                    if (task.getResult() != null) {
-                        List<BeautyService> beautyServiceList = task.getResult().toObjects(BeautyService.class);
-                        for (BeautyService beautyService : beautyServiceList) {
-                            beautyServices.add(beautyService);
-                        }
+        bottomNavigationView = findViewById(R.id.bottom_nav_view);
 
-                    }
-                } else {
-                    Log.w("Error getting document", task.getException());
-                }
+        bottomNavigationView.setOnNavigationItemSelectedListener(item -> {
+            for (int i = 0; i < bottomNavigationView.getMenu().size(); i++) {
+                MenuItem menuItem = bottomNavigationView.getMenu().getItem(i);
+                boolean isChecked = menuItem.getItemId() == item.getItemId();
+                menuItem.setChecked(isChecked);
             }
-        }).addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-
-            @Override
-            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                //CREATE AND BIND TO ADAPTER
-                elv.setAdapter(adapter);
-
-
-            }
-        });
-
-
-        RecyclerView productRecyclerView = (RecyclerView) findViewById(R.id.featured_products_expandable_list_layout);
-
-        final LayoutOptions[] layoutOption = {
-                new LayoutOptions(R.string.face_skin, R.drawable.face_skin),
-                new LayoutOptions(R.string.hair, R.drawable.hair_cut),
-                new LayoutOptions(R.string.makeup, R.drawable.makeup),
-                new LayoutOptions(R.string.massages, R.drawable.massage),
-                new LayoutOptions(R.string.coloring_styling, R.drawable.hair_styling),
-                new LayoutOptions(R.string.bridal, R.drawable.bridal),
-                new LayoutOptions(R.string.manicure, R.drawable.manicure),
-                new LayoutOptions(R.string.pedicure, R.drawable.pedicure)};
-
-
-        LinearLayoutManager layoutManager = new LinearLayoutManager(this);
-        layoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
-        productRecyclerView.setLayoutManager(layoutManager);
-
-        List<LayoutOptions> layoutOptionsStream = Arrays.stream(layoutOption).filter(layoutOpt -> !layout.equalsIgnoreCase(getString(layoutOpt.getName()))).collect(Collectors.toList());
-
-
-        ExpandableServicesHorizontalViewAdapter productAdapter = new ExpandableServicesHorizontalViewAdapter(this,layoutOptionsStream,selectedItems );
-        productRecyclerView.setAdapter(productAdapter);
-
-
-        curvedBottomNavigationView = findViewById(R.id.customBottomBar);
-        curvedBottomNavigationView.inflateMenu(R.menu.bottom_nav_menu);
-
-        curvedBottomNavigationView.setOnNavigationItemSelectedListener(ExpandableListLayout.this);
-
-    }
-
-
-    @Override
-    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-        curvedBottomNavigationView.postDelayed(() -> {
             int itemId = item.getItemId();
             if (itemId == R.id.navigation_featured) {
-                Intent savedIntent = new Intent(this, ImageSlidingScreen.class);
+                Intent savedIntent = new Intent(this, ProductsServicesScreen.class);
                 savedIntent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+                if (mCartItemCount > 0) {
+                    savedIntent.putExtra("count", mCartItemCount);
+                    if (null != selectedItems && selectedItems.getCartList().size() > 0) {
+                        savedIntent.putExtra("selectedItems", selectedItems);
+                    }
+                }
+                if (productCartList.size() > 0)
+                    savedIntent.putExtra("productCartList", (Serializable) productCartList);
+                savedIntent.putExtra("navigationId", R.id.navigation_featured);
                 startActivity(savedIntent);
             } else if (itemId == R.id.navigation_services) {
                 Intent savedIntent = new Intent(this, GridsLayoutScreen.class);
                 savedIntent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+                if (mCartItemCount > 0) {
+                    savedIntent.putExtra("count", mCartItemCount);
+                    if (null != selectedItems && selectedItems.getCartList().size() > 0) {
+                        savedIntent.putExtra("selectedItems", selectedItems);
+                    }
+                }
+                if (productCartList.size() > 0)
+                    savedIntent.putExtra("productCartList", (Serializable) productCartList);
+                savedIntent.putExtra("navigationId", R.id.navigation_services);
+                if (mCartItemCount > 0)
+                    savedIntent.putExtra("count", mCartItemCount);
                 startActivity(savedIntent);
             } else if (itemId == R.id.navigation_products) {
-                Intent savedIntent = new Intent(this, ProductsServicesScreen.class);
+                Intent savedIntent = new Intent(this, ProductsLayoutScreen.class);
                 savedIntent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+                if (mCartItemCount > 0) {
+                    savedIntent.putExtra("count", mCartItemCount);
+                }
+                if (null != selectedItems && selectedItems.getCartList().size() > 0) {
+                    savedIntent.putExtra("selectedItems", selectedItems);
+                }
+
+                if (productCartList.size() > 0)
+                    savedIntent.putExtra("productCartList", (Serializable) productCartList);
+                savedIntent.putExtra("navigationId", R.id.navigation_products);
                 startActivity(savedIntent);
-            }else if (itemId == R.id.navigation_more){
-                Intent savedIntent = new Intent(this, ProductsServicesScreen.class);
+            }  else if (itemId == R.id.navigation_appt) {
+                Intent savedIntent = new Intent(this, BookAppointmentActivity.class);
+                savedIntent.putExtra("navigationId",R.id.navigation_appt);
+                if (mCartItemCount > 0) {
+                    savedIntent.putExtra("count", mCartItemCount);
+                }
+                if (null != selectedItems && selectedItems.getCartList().size() > 0) {
+                    savedIntent.putExtra("selectedItems", selectedItems);
+                }
+
+                if (productCartList.size() > 0)
+                    savedIntent.putExtra("productCartList", (Serializable) productCartList);
                 savedIntent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
                 startActivity(savedIntent);
             }
             //finish();
-        }, 300);
-        return true;
+            bottomNavigationView.setSelected(true);
+            return true;
+        });
+
+        DrawerLayout drawer = findViewById(R.id.expandable_drawer_layout);
+        NavigationView navigationView = findViewById(R.id.drawer_nav_view);
+        navigationView.bringToFront();
+
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        drawer.addDrawerListener(toggle);
+        toggle.syncState();
+        navigationView.setNavigationItemSelectedListener(this);
     }
 
 
@@ -178,42 +178,37 @@ public class ExpandableListLayout extends AppCompatActivity implements BottomNav
     public boolean onCreateOptionsMenu(Menu menu) {
 
         getMenuInflater().inflate(R.menu.action_bar_menu, menu);
-        customMenu = updateCart(menu,  mCartItemCount >0? String.valueOf(mCartItemCount) :"0");
-
-
+        customMenu = updateCart(menu);
         RelativeLayout rl_viewBag = (RelativeLayout) menu.findItem(R.id.action_cart).getActionView();
-
-        textCartItemCount = (TextView)rl_viewBag.findViewById(R.id.cart_badge);
+        textCartItemCount = rl_viewBag.findViewById(R.id.cart_badge);
         setupBadge(mCartItemCount);
         return true;
 
     }
 
-    public Menu updateCart(Menu customMenu, String count) {
+    public Menu updateCart(Menu customMenu) {
 
         MenuItem item = customMenu.findItem(R.id.action_cart);
-        actionView =(RelativeLayout) item.getActionView();
-        textCartItemCount = (TextView) actionView.findViewById(R.id.cart_badge);
+        actionView = (RelativeLayout) item.getActionView();
+        textCartItemCount = actionView.findViewById(R.id.cart_badge);
         setupBadge(mCartItemCount);
 
-        textCartItemCount.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onOptionsItemSelected(item);
-            }
-        });
+        textCartItemCount.setOnClickListener(v -> onOptionsItemSelected(item));
         return customMenu;
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
 
         // Do something
         if (item.getItemId() == R.id.action_cart) {
 
             Intent i = new Intent(this, BookAppointmentActivity.class);
-            i.putExtra("cartList", (Serializable)  adapter.getArrayList());// (Serializable) selectedItems.getCartList());
-            i.putExtra("layout","Selected Items");
+            // selectedItems.setCartList(adapter.getArrayList());
+            i.putExtra("selectedItems", selectedItems);
+            i.putExtra("productCartList", (Serializable) productCartList);
+            i.putExtra("count", textCartItemCount.getText().toString());
+            i.putExtra("layout", "Selected Items");
             startActivity(i);
             return true;
         }
@@ -252,7 +247,42 @@ public class ExpandableListLayout extends AppCompatActivity implements BottomNav
         }
     }
 
-    public void onClickBookAppointments(View view) {
+    @Override
+    public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
+        int id = menuItem.getItemId();
+        Fragment fragment = null;
+
+
+        if (id == R.id.nav_profile) {
+            fragment = new NavigationProfile();
+        } else if (id == R.id.nav_offers) {
+            fragment = new NavigationOffersFragment();
+        } else if (id == R.id.nav_my_orders) {
+            fragment = new NavigationMyOrdersFragment();
+        } else if (id == R.id.nav_refer_frend) {
+            fragment = new NavigationReferAFriend();
+        } else if (id == R.id.nav_contact) {
+            fragment = new NavigationContact();
+        } else if (id == R.id.nav_rate_us) {
+            fragment = new NavigationRateUs();
+        }
+
+        if (fragment != null) {
+            FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+            fragmentTransaction.replace(R.id.expandable_frame, fragment);
+            fragmentTransaction.addToBackStack(null);
+            fragmentTransaction.commit();
+        }
+
+        DrawerLayout drawer = findViewById(R.id.expandable_drawer_layout);
+        drawer.closeDrawer(GravityCompat.START);
+        return true;
     }
 
+
+    @Override
+    public void onListFragmentInteraction(int cartCount, List<Cart> cartItems) {
+        setupBadge(cartCount);
+        selectedItems.setCartList(cartItems);
+    }
 }

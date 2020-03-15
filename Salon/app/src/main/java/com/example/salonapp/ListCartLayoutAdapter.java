@@ -66,7 +66,7 @@ public class ListCartLayoutAdapter extends BaseAdapter {
         imageView.setImageDrawable(context.getDrawable(R.drawable.ic_launcher));
 
         /*TextView price = (TextView) convertView.findViewById(R.id.price);
-        price.setText(context.getResources().getString(R.string.rupee) + " " + cartList.get(cartListPosition).getPrice());*/
+        price.setText(context.getResources().getString(R.string.rupee) + " " + productCartList.get(cartListPosition).getPrice());*/
 
         /*Button decrementButton = (Button) convertView.findViewById(R.id.decrement);
 

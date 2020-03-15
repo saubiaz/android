@@ -1,104 +1,106 @@
 package com.example.salonapp;
 
+import android.content.Intent;
+import android.icu.text.SimpleDateFormat;
+import android.icu.util.Calendar;
+import android.os.Bundle;
+import android.util.Log;
+import android.view.MenuItem;
+import android.view.View;
+import android.widget.ListView;
+import android.widget.TextView;
+
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
-import androidx.recyclerview.widget.DividerItemDecoration;
+import androidx.appcompat.widget.Toolbar;
+import androidx.coordinatorlayout.widget.CoordinatorLayout;
+import androidx.core.view.GravityCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.Manifest;
-import android.app.Activity;
-import android.content.ContentValues;
-import android.content.DialogInterface;
-import android.content.Intent;
-import android.graphics.Color;
-import android.icu.text.SimpleDateFormat;
-import android.icu.util.Calendar;
-import android.net.Uri;
-import android.os.Bundle;
-import android.os.Parcelable;
-import android.util.Log;
-import android.view.Gravity;
-import android.view.MenuItem;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.Button;
-import android.widget.HorizontalScrollView;
-import android.widget.ListView;
-import android.widget.TextView;
-import android.widget.Toast;
-
-import com.example.salonapp.decorations.SpacesItemDecoration;
 import com.example.salonapp.dtos.Cart;
 import com.example.salonapp.dtos.SelectedItems;
 import com.example.salonapp.interfaces.AdapterCallBackForCartCount;
 import com.example.salonapp.interfaces.AdapterCallBackForSelectedItems;
-import com.example.salonapp.views.CurvedBottomNavigationView;
-import com.github.jhonnyx2012.horizontalpicker.DatePickerListener;
-import com.github.jhonnyx2012.horizontalpicker.HorizontalPicker;
-import com.google.android.material.bottomappbar.BottomAppBar;
+import com.example.salonapp.views.ListAddedServicesAdapter;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-
-import org.joda.time.DateTime;
+import com.google.android.material.navigation.NavigationView;
+import com.harrywhewell.scrolldatepicker.DayScrollDatePicker;
 
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
-public class BookAppointmentActivity extends AppCompatActivity implements DatePickerListener, BottomNavigationView.OnNavigationItemSelectedListener, AdapterCallBackForSelectedItems {
+public class BookAppointmentActivity extends AppCompatActivity implements BottomNavigationView.OnNavigationItemSelectedListener,
+        AdapterCallBackForSelectedItems, AdapterCallBackForCartCount, NavigationView.OnNavigationItemSelectedListener {
     SelectedItems selectedItems = new SelectedItems();
-    protected CurvedBottomNavigationView curvedBottomNavigationView;;
-    ListView elv ;
+    protected BottomNavigationView bottomNavigationView;
+    TextView addedServices, addedProducts;
+    int count = 0;
+    ListView elv;
+    DayScrollDatePicker picker;
+    private ArrayList<Cart> productCartList = new ArrayList<>();
+    ListAddedServicesAdapter listAddedServicesAdapter;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_cart_activity);
-        Objects.requireNonNull(getSupportActionBar()).setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
-        getSupportActionBar().setCustomView(R.layout.activity_custom_action_bar);
-        ActionBar.LayoutParams p = new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
-        p.gravity = Gravity.CENTER;
-        TextView layoutName = (TextView) findViewById(R.id.title);
-        layoutName.setText("Book Appointments");
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        TextView mTitle = toolbar.findViewById(R.id.toolbar_title);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
+        mTitle.setText("Book Appointments");
 
-        if(null!=getIntent() && null!=getIntent().getExtras()) {
-            selectedItems.setCartList((ArrayList<Cart>) getIntent().getExtras().get("cartList"));
+        MovableFloatingActionButton fab = findViewById(R.id.cart_fab);
+        CoordinatorLayout.LayoutParams lp = (CoordinatorLayout.LayoutParams) fab.getLayoutParams();
+        fab.setCoordinatorLayout(lp);
+
+        if (null != getIntent() && null != getIntent().getExtras()) {
+            if (null != getIntent() && null != getIntent().getExtras().get("selectedItems")) {
+                selectedItems = (SelectedItems) getIntent().getExtras().get("selectedItems");
+            }
+            if (null != getIntent() && null != getIntent().getExtras().get("count")) {
+                count = Integer.parseInt(String.valueOf(getIntent().getExtras().get("count")));
+            }
+            if (null != getIntent() && null != getIntent().getExtras().get("productCartList")) {
+                productCartList = (ArrayList<Cart>) getIntent().getExtras().get("productCartList");
+            }
         }
-        elv = (ListView) findViewById(R.id.cart_added_services);
-        ListCartLayoutAdapter listLayoutAdapter = new ListCartLayoutAdapter(getApplicationContext(), selectedItems,this);
-        elv.setAdapter(listLayoutAdapter);
 
-        // find the picker
-        HorizontalPicker picker = (HorizontalPicker) findViewById(R.id.datePicker);
+        if (null != selectedItems && null != selectedItems.getCartList() && selectedItems.getCartList().size() > 0) {
+            addedServices = findViewById(R.id.added_services_text);
+            addedServices.setText("Added Services");
+            elv = findViewById(R.id.cart_added_service);
+            listAddedServicesAdapter = new ListAddedServicesAdapter(getApplicationContext(), count, selectedItems.getCartList(), this, this, true);
+            elv.setAdapter(listAddedServicesAdapter);
+        }
 
-        // initialize it and attach a listener
-        picker.setListener((DatePickerListener) this)
-                .setDateSelectedColor(ContextCompat.getColor(getApplicationContext(), R.color.pink))
-                .setDateSelectedTextColor(Color.WHITE)
-                .setMonthAndYearTextColor(Color.DKGRAY)
-                .setTodayButtonTextColor(getColor(R.color.colorPrimary))
-                .setTodayDateTextColor(getColor(R.color.colorPrimary))
-                .setTodayDateBackgroundColor(Color.GRAY)
-                .setUnselectedDayTextColor(Color.DKGRAY)
-                .setDayOfWeekTextColor(Color.BLACK)
-                .showTodayButton(false)
-                .init();
+        if (null != productCartList && productCartList.size() > 0) {
+            addedProducts = findViewById(R.id.added_products_text);
+            addedProducts.setText("Added Products");
+            elv = findViewById(R.id.cart_added_products);
+            listAddedServicesAdapter = new ListAddedServicesAdapter(getApplicationContext(), count, productCartList, this, this, false);
+            elv.setAdapter(listAddedServicesAdapter);
+        }
 
-        // or on the View directly after init was completed
-        picker.setBackgroundColor(Color.LTGRAY);
-        picker.setDate(new DateTime().plusDays(4));
+        picker = findViewById(R.id.datePicker);
+        picker.setStartDate(01, 01, 2020);
+        picker.setEndDate(31, 12, 2045);
 
-        RecyclerView recyclerView = (RecyclerView) findViewById(R.id.time_view);
+        picker.getSelectedDate(date -> {
+            Log.i("HorizontalPicker", "Selected date is " + date.toString());
+            selectedItems.setDate(date.toString());
+        });
 
-       /* int spacingInPixels = getResources().getDimensionPixelSize(R.dimen.padding_small);
-        recyclerView.addItemDecoration(new SpacesItemDecoration(spacingInPixels));
-*/
+        RecyclerView recyclerView = findViewById(R.id.time_view);
+
         final String[] times = {"10:00 AM", "10:30 AM", "11:00 AM", "11:30 AM", "12:00 PM", "12:30 PM", "01:00 PM"};
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
@@ -107,27 +109,70 @@ public class BookAppointmentActivity extends AppCompatActivity implements DatePi
 
         HorizontalViewAdapter adapter = new HorizontalViewAdapter(this, times, selectedItems);
         recyclerView.setAdapter(adapter);
-        curvedBottomNavigationView = findViewById(R.id.customBottomBar);
-        curvedBottomNavigationView.inflateMenu(R.menu.bottom_nav_menu);
 
-        curvedBottomNavigationView.setOnNavigationItemSelectedListener(this);
+        bottomNavigationView = findViewById(R.id.bottom_nav_view);
+        bottomNavigationView.setOnNavigationItemSelectedListener(item -> {
+            for (int i = 0; i < bottomNavigationView.getMenu().size(); i++) {
+                MenuItem menuItem = bottomNavigationView.getMenu().getItem(i);
+                boolean isChecked = menuItem.getItemId() == item.getItemId();
+                menuItem.setChecked(isChecked);
+            }
+            int itemId = item.getItemId();
+            if (itemId == R.id.navigation_featured) {
+                Intent savedIntent = new Intent(this, ProductsServicesScreen.class);
+                savedIntent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+                savedIntent.putExtra("navigationId", R.id.navigation_featured);
+                startActivityIfNeeded(savedIntent, 0);
+            } else if (itemId == R.id.navigation_services) {
+                Intent savedIntent = new Intent(this, GridsLayoutScreen.class);
+                savedIntent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+                Bundle bundle = new Bundle();
+                bundle.putSerializable("selectedItems", selectedItems);
+                bundle.putSerializable("productCartList", productCartList);
+                bundle.putInt("count", count);
+                bundle.putSerializable("navigationId", R.id.navigation_services);
+                savedIntent.putExtras(bundle);
+                startActivityIfNeeded(savedIntent, 0);
+            } else if (itemId == R.id.navigation_products) {
+                Intent savedIntent = new Intent(this, ProductsLayoutScreen.class);
+                savedIntent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+                savedIntent.putExtra("selectedItems", selectedItems);
+                savedIntent.putExtra("productCartList", productCartList);
+                savedIntent.putExtra("count", count);
+                savedIntent.putExtra("navigationId", R.id.navigation_products);
+                startActivityIfNeeded(savedIntent, 0);
+            } else if (itemId == R.id.navigation_appt) {
+                Intent savedIntent = new Intent(this, BookAppointmentActivity.class);
+                savedIntent.putExtra("navigationId", R.id.navigation_appt);
+                savedIntent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+                savedIntent.putExtra("selectedItems", selectedItems);
+                savedIntent.putExtra("productCartList", productCartList);
+                savedIntent.putExtra("count", count);
+                savedIntent.putExtra("navigationId", R.id.navigation_products);
+                startActivity(savedIntent);
+            }
+            finish();
+            bottomNavigationView.setSelected(true);
+            return true;
+        });
+
+        DrawerLayout drawer = findViewById(R.id.book_aapt_drawer_layout);
+        NavigationView navigationView = findViewById(R.id.drawer_nav_view);
+
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        drawer.addDrawerListener(toggle);
+        toggle.syncState();
+        navigationView.setNavigationItemSelectedListener(this);
 
 
     }
 
-    @Override
-    public void onDateSelected(@NonNull final DateTime dateSelected) {
-        // log it for demo
-        Log.i("HorizontalPicker", "Selected date is " + dateSelected.toString());
-        selectedItems.setDate(dateSelected.toString());
-    }
-
-
-    public void onClickToAddCalendar(View view){
+    public void onClickToAddCalendar(View view) {
 
         Calendar cal = Calendar.getInstance();
         try {
-            cal.setTime(new SimpleDateFormat("yyyy-MM-dd'T'hh:mm:ss.SSS").parse(selectedItems.getDate()+selectedItems.getTime()));
+            cal.setTime(new SimpleDateFormat("yyyy-MM-dd'T'hh:mm:ss.SSS").parse(selectedItems.getDate() + selectedItems.getTime()));
         } catch (ParseException e) {
             e.printStackTrace();
         }
@@ -136,54 +181,82 @@ public class BookAppointmentActivity extends AppCompatActivity implements DatePi
         intent.putExtra("beginTime", cal.getTimeInMillis());
         intent.putExtra("allDay", false);
         intent.putExtra("rrule", "FREQ=YEARLY");
-        intent.putExtra("endTime",cal.getTimeInMillis() + 60 * 60 * 1000);
+        intent.putExtra("endTime", cal.getTimeInMillis() + 60 * 60 * 1000);
         intent.putExtra("title", "Ella Salon Appointment");
         startActivity(intent);
     }
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-        curvedBottomNavigationView.postDelayed(() -> {
-            int itemId = item.getItemId();
-            if (itemId == R.id.navigation_featured) {
-                Intent savedIntent = new Intent(this, ImageSlidingScreen.class);
-                savedIntent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
-                startActivity(savedIntent);
-            } else if (itemId == R.id.navigation_services) {
-                Intent savedIntent = new Intent(this, GridsLayoutScreen.class);
-                savedIntent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
-                startActivity(savedIntent);
-            } else if (itemId == R.id.navigation_products) {
-                Intent savedIntent = new Intent(this, VerifyOrder.class);
-                savedIntent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
-                savedIntent.putExtra("selectedItems",selectedItems);
-                startActivity(savedIntent);
+        int id = item.getItemId();
 
-            }else if (itemId == R.id.navigation_more){
-                Intent savedIntent = new Intent(this, ProductsServicesScreen.class);
-                savedIntent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
-                startActivity(savedIntent);
-            }
-            //finish();
-        }, 300);
+        Fragment fragment = null;
+
+
+        if (id == R.id.nav_profile) {
+            fragment = new NavigationProfile();
+        } else if (id == R.id.nav_offers) {
+            fragment = new NavigationOffersFragment();
+        } else if (id == R.id.nav_my_orders) {
+            fragment = new NavigationMyOrdersFragment();
+        } else if (id == R.id.nav_refer_frend) {
+            fragment = new NavigationReferAFriend();
+        } else if (id == R.id.nav_contact) {
+            fragment = new NavigationContact();
+        } else if (id == R.id.nav_rate_us) {
+            fragment = new NavigationRateUs();
+        }
+
+        if (fragment != null) {
+            FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+            fragmentTransaction.replace(R.id.expandable_frame, fragment);
+            fragmentTransaction.addToBackStack(null);
+            fragmentTransaction.commit();
+        }
+
+        DrawerLayout drawer = findViewById(R.id.expandable_drawer_layout);
+        drawer.closeDrawer(GravityCompat.START);
         return true;
     }
 
 
+    @Override
+    public void getTheSelectedItems() {
+        elv.invalidateViews();
+    }
 
-        @Override
-        public void getTheSelectedItems() {
-            elv.invalidateViews();
-        }
+    @Override
+    public SelectedItems getSelecetedItems() {
+        return null;
+    }
 
-
-
-    public void onClickConfirmOrder(View view){
+    public void onClickConfirmOrder(View view) {
         Intent savedIntent = new Intent(this, ConfirmOrderActivity.class);
-        savedIntent.putExtra("selectedItems",selectedItems);
+        savedIntent.putExtra("selectedItems", selectedItems);
+        if (productCartList.size() > 0) {
+            savedIntent.putExtra("productCartList", productCartList);
+        }
         startActivity(savedIntent);
     }
+
+    @Override
+    public void onChangeBadgeCount(int cartCount) {
+        count = cartCount;
     }
+
+    @Override
+    public void setCartList(List<Cart> cartList, boolean isService) {
+        if (isService) {
+            selectedItems.setCartList(cartList);
+        } else {
+            productCartList = new ArrayList<>();
+            if (!cartList.isEmpty()) {
+                productCartList.addAll(cartList);
+            }
+        }
+
+    }
+}
 
 
 

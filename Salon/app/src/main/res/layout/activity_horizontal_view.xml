@@ -12,7 +12,6 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/time_view"
         android:layout_width="match_parent"
-        android:paddingTop="12dp"
         android:layout_height="match_parent"
         android:textAlignment="center"
         android:orientation="horizontal"

@@ -18,10 +18,8 @@
         android:title="@string/title_products" />
 
     <item
-        android:id="@+id/navigation_more"
+        android:id="@+id/navigation_appt"
         android:icon="@drawable/ic_more_horiz_black_24dp"
-        android:title="More" />
-
-
+        android:title="Book Now" />
 
 </menu>

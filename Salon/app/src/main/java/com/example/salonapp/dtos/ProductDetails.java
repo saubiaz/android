@@ -2,8 +2,16 @@ package com.example.salonapp.dtos;
 
 public class ProductDetails {
 
-    public String description;
-    public Double price;
+    private int resourceId;
+    private String description;
+    private Double price;
+
+
+    public ProductDetails(int resourceId, String description, Double price) {
+        this.resourceId = resourceId;
+        this.description = description;
+        this.price = price;
+    }
 
     public String getDescription() {
         return description;
@@ -19,5 +27,13 @@ public class ProductDetails {
 
     public void setPrice(Double price) {
         this.price = price;
+    }
+
+    public int getResourceId() {
+        return resourceId;
+    }
+
+    public void setResourceId(int resourceId) {
+        this.resourceId = resourceId;
     }
 }

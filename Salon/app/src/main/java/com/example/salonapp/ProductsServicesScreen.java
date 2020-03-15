@@ -6,22 +6,28 @@ import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Handler;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBarDrawerToggle;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.ContextCompat;
-import androidx.fragment.app.FragmentActivity;
+import androidx.core.view.GravityCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.ViewPager;
 
 import com.example.salonapp.dtos.LayoutOptions;
-import com.example.salonapp.views.CurvedBottomNavigationView;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.navigation.NavigationView;
 
-public class ProductsServicesScreen extends FragmentActivity  implements BottomNavigationView.OnNavigationItemSelectedListener{
+public class ProductsServicesScreen extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
     private int currentPage = 0;
     private static final long SLIDER_TIMER = 2000;
@@ -30,9 +36,10 @@ public class ProductsServicesScreen extends FragmentActivity  implements BottomN
     private int dotscount;
     private ImageView[] dots;
     private Handler handler;
-
-    protected CurvedBottomNavigationView curvedBottomNavigationView;
-
+    private DrawerLayout drawer;
+    protected BottomNavigationView bottomNavigationView;
+    ActionBarDrawerToggle toggle = null;
+    NavigationView navigationView ;
 
     private boolean isCountDownTimerActive = false;
 
@@ -51,16 +58,100 @@ public class ProductsServicesScreen extends FragmentActivity  implements BottomN
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_products_services_screen);
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        TextView mTitle = toolbar.findViewById(R.id.toolbar_title);
+        mTitle.setText("SERVICES & PRODUCTS");
+        applyViewPager();
 
-        viewPager = (ViewPager) findViewById(R.id.myViewPager);
+        final LayoutOptions[] layoutOption = {
+                new LayoutOptions(R.string.face_skin, R.drawable.face_skin),
+                new LayoutOptions(R.string.hair, R.drawable.hair_cut),
+                new LayoutOptions(R.string.makeup, R.drawable.makeup),
+                new LayoutOptions(R.string.massages, R.drawable.massage),
+                new LayoutOptions(R.string.coloring_styling, R.drawable.hair_styling),
+                new LayoutOptions(R.string.bridal, R.drawable.bridal),
+                new LayoutOptions(R.string.manicure, R.drawable.manicure),
+                new LayoutOptions(R.string.pedicure, R.drawable.pedicure)};
+
+
+        RecyclerView serviceRecyclerView = findViewById(R.id.featured_services);
+
+        bottomNavigationView = findViewById(R.id.bottom_nav_view);
+        bottomNavigationView.setOnNavigationItemSelectedListener(item -> {
+            for (int i = 0; i < bottomNavigationView.getMenu().size(); i++) {
+                MenuItem menuItem = bottomNavigationView.getMenu().getItem(i);
+                boolean isChecked = menuItem.getItemId() == item.getItemId();
+                menuItem.setChecked(isChecked);
+            }
+            int itemId = item.getItemId();
+            if (itemId == R.id.navigation_featured) {
+                Intent savedIntent = new Intent(this, ProductsServicesScreen.class);
+                savedIntent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+                savedIntent.putExtra("navigationId", R.id.navigation_featured);
+                startActivity(savedIntent);
+            } else if (itemId == R.id.navigation_services) {
+                Intent savedIntent = new Intent(this, GridsLayoutScreen.class);
+                savedIntent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+                savedIntent.putExtra("navigationId", R.id.navigation_services);
+                startActivity(savedIntent);
+            } else if (itemId == R.id.navigation_products) {
+                Intent savedIntent = new Intent(this, ProductsLayoutScreen.class);
+                savedIntent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+                savedIntent.putExtra("navigationId", R.id.navigation_products);
+                startActivity(savedIntent);
+            } else if (itemId == R.id.navigation_appt) {
+                Intent savedIntent = new Intent(this, BookAppointmentActivity.class);
+                savedIntent.putExtra("navigationId", R.id.navigation_appt);
+                savedIntent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+                startActivity(savedIntent);
+            }
+            //finish();
+            bottomNavigationView.setSelected(true);
+            return true;
+        });
+
+        DrawerLayout drawer = findViewById(R.id.product_drawer_layout);
+
+
+         toggle = new ActionBarDrawerToggle(
+                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        drawer.addDrawerListener(toggle);
+        toggle.syncState();
+        navigationView = findViewById(R.id.drawer_nav_view);
+        navigationView.setNavigationItemSelectedListener(this);
+        navigationView.bringToFront();
+
+        LinearLayoutManager servicesLayoutManager = new LinearLayoutManager(this);
+        servicesLayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
+        serviceRecyclerView.setLayoutManager(servicesLayoutManager);
+
+        FeaturedServicesHorizontalViewAdapter servicesAdapter = new FeaturedServicesHorizontalViewAdapter(this, layoutOption);
+        serviceRecyclerView.setAdapter(servicesAdapter);
+
+
+        RecyclerView productRecyclerView = findViewById(R.id.featured_products);
+
+
+        LinearLayoutManager layoutManager = new LinearLayoutManager(this);
+        layoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
+        productRecyclerView.setLayoutManager(layoutManager);
+
+        FeaturedProductsHorizontalViewAdapter productAdapter = new FeaturedProductsHorizontalViewAdapter(this, layoutOption);
+        productRecyclerView.setAdapter(productAdapter);
+    }
+
+    private void applyViewPager() {
+        viewPager = findViewById(R.id.myViewPager);
         ViewPagerAdapter viewPagerAdapter = new ViewPagerAdapter(this);
         viewPager.setAdapter(viewPagerAdapter);
 
-        viewPager = (ViewPager) findViewById(R.id.myViewPager);
+        viewPager = findViewById(R.id.myViewPager);
 
-        sliderDotspanel = (LinearLayout) findViewById(R.id.SliderDots);
+        sliderDotspanel = findViewById(R.id.slider_dots);
 
         handler = new Handler();
 
@@ -109,49 +200,6 @@ public class ProductsServicesScreen extends FragmentActivity  implements BottomN
 
             }
         });
-
-
-
-
-       /* int spacingInPixels = getResources().getDimensionPixelSize(R.dimen.padding_small);
-        recyclerView.addItemDecoration(new SpacesItemDecoration(spacingInPixels));
-*/
-        final LayoutOptions[] layoutOption = {
-                new LayoutOptions(R.string.face_skin, R.drawable.face_skin),
-                new LayoutOptions(R.string.hair, R.drawable.hair_cut),
-                new LayoutOptions(R.string.makeup, R.drawable.makeup),
-                new LayoutOptions(R.string.massages, R.drawable.massage),
-                new LayoutOptions(R.string.coloring_styling, R.drawable.hair_styling),
-                new LayoutOptions(R.string.bridal, R.drawable.bridal),
-                new LayoutOptions(R.string.manicure, R.drawable.manicure),
-                new LayoutOptions(R.string.pedicure, R.drawable.pedicure)};
-
-
-        RecyclerView serviceRecyclerView = (RecyclerView) findViewById(R.id.featured_services);
-
-        LinearLayoutManager serviceslayoutManager = new LinearLayoutManager(this);
-        serviceslayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
-        serviceRecyclerView.setLayoutManager(serviceslayoutManager);
-
-        FeaturedServicesHorizontalViewAdapter servicesAdapter = new FeaturedServicesHorizontalViewAdapter(this, layoutOption);
-        serviceRecyclerView.setAdapter(servicesAdapter);
-
-
-        RecyclerView productRecyclerView = (RecyclerView) findViewById(R.id.featured_products);
-
-
-        LinearLayoutManager layoutManager = new LinearLayoutManager(this);
-        layoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
-        productRecyclerView.setLayoutManager(layoutManager);
-
-        FeaturedProductsHorizontalViewAdapter productAdapter = new FeaturedProductsHorizontalViewAdapter(this, layoutOption);
-        productRecyclerView.setAdapter(productAdapter);
-
-        curvedBottomNavigationView = findViewById(R.id.customBottomBar);
-        curvedBottomNavigationView.inflateMenu(R.menu.bottom_nav_menu);
-
-        curvedBottomNavigationView.setOnNavigationItemSelectedListener(ProductsServicesScreen.this);
-
     }
 
     private void automateSlider() {
@@ -167,7 +215,6 @@ public class ProductsServicesScreen extends FragmentActivity  implements BottomN
             public void onFinish() {
 
                 int nextSlider = currentPage + 1;
-
 
 
                 if (nextSlider == 4) {
@@ -187,50 +234,48 @@ public class ProductsServicesScreen extends FragmentActivity  implements BottomN
         handler.removeCallbacks(runnable);
     }
 
-
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-        // uncheck the other items.
-        int mMenuId = item.getItemId();
-        for (int i = 0; i < curvedBottomNavigationView.getMenu().size(); i++) {
-            MenuItem menuItem = curvedBottomNavigationView.getMenu().getItem(i);
-            boolean isChecked = menuItem.getItemId() == item.getItemId();
-            menuItem.setChecked(isChecked);
+
+        int id = item.getItemId();
+        Fragment fragment = null;
+
+
+        if (id == R.id.nav_profile) {
+            fragment = new NavigationProfile();
+        } else if (id == R.id.nav_offers) {
+            fragment = new NavigationOffersFragment();
+        } else if (id == R.id.nav_my_orders) {
+            fragment = new NavigationMyOrdersFragment();
+        } else if (id == R.id.nav_refer_frend) {
+            fragment = new NavigationReferAFriend();
+        } else if (id == R.id.nav_contact) {
+            fragment = new NavigationContact();
+        } else if (id == R.id.nav_rate_us) {
+            fragment = new NavigationRateUs();
         }
-        curvedBottomNavigationView.postDelayed(() -> {
-            int itemId = item.getItemId();
-            if (itemId == R.id.navigation_featured) {
-                Intent savedIntent = new Intent(this, ProductsServicesScreen.class);
-                savedIntent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
-                savedIntent.putExtra("navigationId",R.id.navigation_featured);
-                startActivity(savedIntent);
-            } else if (itemId == R.id.navigation_services) {
-                Intent savedIntent = new Intent(this, GridsLayoutScreen.class);
-                savedIntent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
-                savedIntent.putExtra("navigationId",R.id.navigation_services);
-                startActivity(savedIntent);
-            } else if (itemId == R.id.navigation_products) {
-                Intent savedIntent = new Intent(this, GridsLayoutScreen.class);
-                savedIntent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
-                savedIntent.putExtra("navigationId",R.id.navigation_products);
-                startActivity(savedIntent);
-            }else if (itemId == R.id.navigation_more){
-                Intent savedIntent = new Intent(this, ProductsServicesScreen.class);
-                savedIntent.putExtra("navigationId",R.id.navigation_more);
-                savedIntent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
-                startActivity(savedIntent);
-            }
-            //finish();
-        }, 300);
-        curvedBottomNavigationView.setSelected(true);
+
+        if (fragment != null) {
+            FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+           fragmentTransaction.replace(R.id.nav_frame, fragment);
+            fragmentTransaction.addToBackStack(null);
+            fragmentTransaction.commit();
+        }
+
+        DrawerLayout drawer = findViewById(R.id.product_drawer_layout);
+        drawer.closeDrawer(GravityCompat.START);
         return true;
     }
 
-    public void onClickServicesScreen(View view) {
-
-        Intent savedIntent = new Intent(this, GridsLayoutScreen.class);
-        savedIntent.putExtra("navigationId",R.id.navigation_services);
-        startActivity(savedIntent);
+    @Override
+    public void onBackPressed() {
+        DrawerLayout drawer = findViewById(R.id.grids_drawer_layout);
+        if (drawer.isDrawerOpen(GravityCompat.START)) {
+            drawer.closeDrawer(GravityCompat.START);
+        } else {
+            super.onBackPressed();
+        }
     }
+
 }
 
